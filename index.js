@@ -1,18 +1,11 @@
-/*
-  A ping pong bot, whenever you send "ping", it replies "pong".
-*/
-
-// Import the discord.js module
+// Import modules
 const Discord = require('discord.js');
+
+// Read config file
+const config = require('./config.json');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
-
-// The token of your bot - https://discordapp.com/developers/applications/me
-const token = '***REMOVED***';
-
-// Prefix to denote bot command
-const prefix = 's!';
 
 // Event
 client.on('ready', () => {
@@ -22,9 +15,11 @@ client.on('ready', () => {
 // Create an event listener for messages
 client.on('message', (message) => {
   // Make sure I'm sending message starting w/ prefix
-  if (message.author !== client.user || !message.content.startsWith(prefix)) return;
+  if (message.author !== client.user || !message.content.startsWith(config.prefix)) return;
 
-  let command = message.content.slice(prefix.length).toLowerCase();
+  // Get command and arguments
+  const command = message.content.toLowerCase().slice(config.prefix.length);
+  const args = message.content.toLowerCase().slice(config.prefix.length).split(' ').slice(1);
 
   // Simple ping/pong command
   if (command === 'ping') {
@@ -33,4 +28,4 @@ client.on('message', (message) => {
 });
 
 // Log bot in
-client.login(token);
+client.login(config.token);
