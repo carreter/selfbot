@@ -2,6 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
+const random = require('seedrandom');
 
 // Read config file
 const config = require('./config.json');
@@ -21,12 +22,12 @@ client.on('message', (message) => {
 
   // Get command and arguments
   const command = message.content.toLowerCase().slice(config.prefix.length).split(' ')[0];
-  const args = message.content.toLowerCase().slice(config.prefix.length).split(' ').slice(1);
+  const args = message.content.slice(config.prefix.length).split(' ').slice(1);
 
   switch (command) {
     // Simple ping/pong command
     case 'ping': {
-      message.edit(`:information_source: Pong! | ${Date.now() - message.createdAt} ms`);
+      message.edit(`:information_source: Pong!  |  ${Date.now() - message.createdAt} ms`);
       break;
     }
 
@@ -57,6 +58,15 @@ client.on('message', (message) => {
           message.edit(':x: Error! Please check bot logs.');
           console.error(err);
         });
+      break;
+    }
+
+    // Command to rate waifus
+    case 'rate': {
+      const waifu = args.join(' '); // Join arguments into single string
+      const rating = Math.round(random(waifu)() * 10); // Rng rating seeded w/ waifu's name
+
+      message.channel.send(`:thinking:  |  I'd give ${waifu} a ${rating}/10`);
       break;
     }
     // Make a warning if command not recognized
