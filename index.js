@@ -69,6 +69,14 @@ client.on('message', (message) => {
       message.channel.send(`:thinking:  |  I'd give ${waifu} a ${rating}/10`);
       break;
     }
+
+    // Command to choose between options
+    case 'choose': {
+      const choice = args.join(' ').split('|')[Math.round(Math.random() * args.length)];
+
+      message.channel.send(`:thinking:  |  I choose ${choice}!`);
+      break;
+    }
     // Make a warning if command not recognized
     default: {
       console.warn(`${command} is not a valid command!`);
