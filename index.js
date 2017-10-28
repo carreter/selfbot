@@ -23,7 +23,6 @@ fs.readJSON(configFile) // Attempt to read file
     }
   });
 
-
 // Read command modules
 const commands = requireDir('./commands');
 
@@ -41,5 +40,8 @@ client.on('message', (message) => {
   const command = message.content.toLowerCase().slice(config.prefix.length).split(' ')[0];
   const args = message.content.slice(config.prefix.length).split(' ').slice(1);
 
-  commands[command].command(message, args);
+  // Check if command exists, then run it if it does
+  if (Object.prototype.hasOwnProperty.call(commands, command)) {
+    commands[command].command(message, args);
+  }
 });
