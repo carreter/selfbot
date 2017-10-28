@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "discord.js": "^11.1.0",
-    "fs-extra": "^3.0.1",
+    "fs-extra": "^4.0.2",
+    "require-dir": "^0.3.2",
     "seedrandom": "^2.4.3"
   }
 }
