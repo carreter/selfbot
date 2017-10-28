@@ -1,19 +1,35 @@
 // Import modules
 const Discord = require('discord.js');
 const requireDir = require('require-dir');
-
-// Read command modules
-const commands = requireDir('./commands');
-
-// Read config file
-const config = require('./config.json');
+const fs = require('fs-extra');
+const path = require('path');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
 
-// Event
+// Read config file, create it if it does not exist
+let config;
+const configFile = path.resolve('./config.json');
+
+fs.readJSON(configFile) // Attempt to read file
+  .then((configObj) => { config = configObj; })
+  .then(() => client.login(config.token)) // Login once config file read
+  .catch((err) => {
+    if (err.code === 'ENOENT') { // Prompt to create config file if it does not exist
+      console.error('Config file not found, creating template. Please fill this out and rerun bot!');
+      fs.writeJSON(configFile, { token: '', prefix: 's!' });
+    } else {
+      console.log(err);
+    }
+  });
+
+
+// Read command modules
+const commands = requireDir('./commands');
+
+// Notify on connection to Discord
 client.on('ready', () => {
-  console.log('I am ready!');
+  console.log('Connected to Discord API.');
 });
 
 // Create an event listener for messages
@@ -27,6 +43,3 @@ client.on('message', (message) => {
 
   commands[command].command(message, args);
 });
-
-// Log bot in
-client.login(config.token);
